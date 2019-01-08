@@ -9,20 +9,23 @@ import * as GroupsContext from './state/groups/context';
 import * as ContactsContext from './state/contacts/context';
 import * as SnackbarContext from './state/snackbar/context';
 import * as ListSettingsContext from './state/listSettings/context';
+import * as UIContext from './state/ui/context';
 
 const Root = () => (
-  <SnackbarContext.Provider>
-    <ListSettingsContext.Provider>
-      <GroupsContext.Provider>
-        <ContactsContext.Provider>
-          <MuiThemeProvider>
-            <Router>
-              <Route path={HOME_PATHNAME} component={App} />
-            </Router>
-          </MuiThemeProvider>
-        </ContactsContext.Provider>
-      </GroupsContext.Provider>
-    </ListSettingsContext.Provider>
-  </SnackbarContext.Provider>
+  <UIContext.Provider>
+    <SnackbarContext.Provider>
+      <ListSettingsContext.Provider>
+        <GroupsContext.Provider>
+          <ContactsContext.Provider>
+            <MuiThemeProvider>
+              <Router>
+                <Route path={HOME_PATHNAME} component={App} />
+              </Router>
+            </MuiThemeProvider>
+          </ContactsContext.Provider>
+        </GroupsContext.Provider>
+      </ListSettingsContext.Provider>
+    </SnackbarContext.Provider>
+  </UIContext.Provider>
 );
 ReactDOM.render(<Root />, document.getElementById('root'));

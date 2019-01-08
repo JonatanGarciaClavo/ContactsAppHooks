@@ -1,18 +1,13 @@
-import React from "react";
-import { connect } from "react-redux";
-import LinearProgress from "material-ui/LinearProgress";
+import React, { useContext } from 'react';
+import LinearProgress from 'material-ui/LinearProgress';
+import { Context as UIContext } from '../../state/ui/context';
 
-function Loader({ loading }) {
-  if (loading) {
+function Loader() {
+  const [ui] = useContext(UIContext);
+  if (ui.isLoading) {
     return <LinearProgress mode="indeterminate" />;
   }
-  return <span style={{ width: "4px" }} />;
+  return <span style={{ width: '4px' }} />;
 }
 
-const mapStateToProps = (state) => {
-  return {
-    loading: state.loading.global,
-  };
-};
-
-export default connect(mapStateToProps)(Loader);
+export default Loader;

@@ -12,7 +12,7 @@ import ContactForm from './containers/ContactForm';
 import ContactList from './containers/ContactList';
 import ContactDetail from './containers/ContactDetail';
 import Navbar from './containers/Navbar';
-// import Loader from "./containers/Loader";
+import Loader from './containers/Loader';
 import Snackbar from './containers/Snackbar';
 import GroupForm from './containers/GroupForm';
 
@@ -22,7 +22,7 @@ class App extends Component {
     return (
       <div>
         <Navbar location={location} history={history} />
-        {/* <Loader /> */}
+        <Loader />
         <Switch>
           <Route exact path={ADD_PATHNAME} component={ContactForm} />
           <Route exact path={LIST_PATHNAME} component={ContactList} />

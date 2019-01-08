@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react';
+import { useContext } from 'react';
 import { Context as GroupsContext } from './context';
 import { Context as SnackbarContext } from '../snackbar/context';
 import {
@@ -8,6 +8,7 @@ import {
   getGroupsService,
   getGroupService,
 } from '../../services/groups';
+import useAsyncLoaderCallback from '../shared/useAsyncLoaderCallback';
 
 export default function useGroupsEffects() {
   const {
@@ -16,7 +17,7 @@ export default function useGroupsEffects() {
   const {
     1: { setMessage, displayError },
   } = useContext(SnackbarContext);
-  const createGroup = useCallback(async group => {
+  const createGroup = useAsyncLoaderCallback(async group => {
     try {
       const payload = await postGroupService(group);
       addGroups(payload);
@@ -25,7 +26,7 @@ export default function useGroupsEffects() {
       displayError(error);
     }
   }, []);
-  const updateGroupRequest = useCallback(async group => {
+  const updateGroupRequest = useAsyncLoaderCallback(async group => {
     try {
       const payload = await updateGroupService(group);
       setMessage('Group updated successfully');
@@ -34,7 +35,7 @@ export default function useGroupsEffects() {
       displayError(error);
     }
   }, []);
-  const deleteGroupRequest = useCallback(async id => {
+  const deleteGroupRequest = useAsyncLoaderCallback(async id => {
     try {
       await deleteGroupService(id);
       deleteGroups(id);
@@ -43,7 +44,7 @@ export default function useGroupsEffects() {
       displayError(error);
     }
   }, []);
-  const requestGroupList = useCallback(async () => {
+  const requestGroupList = useAsyncLoaderCallback(async () => {
     try {
       const payload = await getGroupsService();
       listGroups(payload);
@@ -51,7 +52,7 @@ export default function useGroupsEffects() {
       displayError(error);
     }
   }, []);
-  const requestGroup = useCallback(async id => {
+  const requestGroup = useAsyncLoaderCallback(async id => {
     try {
       await getGroupService(id);
       updateGroups(id);

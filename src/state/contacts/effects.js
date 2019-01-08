@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react';
+import { useContext } from 'react';
 import { Context as ContactsContext } from './context';
 import { Context as SnackbarContext } from '../snackbar/context';
 import {
@@ -9,6 +9,7 @@ import {
   getContactService,
 } from '../../services/contacts';
 import useGroupEffects from '../groups/effects';
+import useAsyncLoaderCallback from '../shared/useAsyncLoaderCallback';
 
 export default function useContactEffects() {
   const {
@@ -18,7 +19,7 @@ export default function useContactEffects() {
     1: { setMessage, displayError },
   } = useContext(SnackbarContext);
   const { requestGroupList } = useGroupEffects();
-  const createContact = useCallback(async contact => {
+  const createContact = useAsyncLoaderCallback(async contact => {
     try {
       requestGroupList();
       const payload = await postContactService(contact);
@@ -28,7 +29,7 @@ export default function useContactEffects() {
       displayError(error);
     }
   }, []);
-  const updateContactRequest = useCallback(async contact => {
+  const updateContactRequest = useAsyncLoaderCallback(async contact => {
     try {
       const payload = await updateContactService(contact);
       setMessage('Contact updated successfully');
@@ -37,7 +38,7 @@ export default function useContactEffects() {
       displayError(error);
     }
   }, []);
-  const deleteContactRequest = useCallback(async id => {
+  const deleteContactRequest = useAsyncLoaderCallback(async id => {
     try {
       await deleteContactService(id);
       deleteContact(id);
@@ -46,7 +47,7 @@ export default function useContactEffects() {
       displayError(error);
     }
   }, []);
-  const requestContactList = useCallback(async () => {
+  const requestContactList = useAsyncLoaderCallback(async () => {
     try {
       requestGroupList();
       const payload = await getContactsService();
@@ -55,7 +56,7 @@ export default function useContactEffects() {
       displayError(error);
     }
   }, []);
-  const requestContact = useCallback(async id => {
+  const requestContact = useAsyncLoaderCallback(async id => {
     try {
       requestGroupList();
       await getContactService(id);
