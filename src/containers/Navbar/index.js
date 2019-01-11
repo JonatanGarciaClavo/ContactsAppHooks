@@ -1,7 +1,14 @@
 import React, { useState, useCallback, useContext } from 'react';
-import AppBar from 'material-ui/AppBar';
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
+import { makeStyles } from '@material-ui/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Drawer from '@material-ui/core/Drawer';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuIcon from '@material-ui/icons/Menu';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import IconElementList from '../../components/IconElementList';
 import {
   HOME_PATHNAME,
@@ -11,50 +18,64 @@ import {
 } from '../../globals/pathNames';
 import { Context as ListSettingsContext } from '../../state/listSettings/context';
 
-const textToRouter = {
-  List: LIST_PATHNAME,
-  About: HOME_PATHNAME,
-  'Add Contact': ADD_PATHNAME,
-  'Add Group': ADD_GROUP_PATHNAME,
-};
-
-function renderIconElementRight(pathname, changeListMode) {
-  if (pathname === LIST_PATHNAME) {
-    return <IconElementList changeListMode={changeListMode} />;
-  }
-  return null;
-}
+const useStyles = makeStyles(() => ({
+  grow: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20,
+  },
+  list: {
+    width: 200,
+  },
+}));
 
 function Navbar({ location, history }) {
+  const classes = useStyles();
   const [isLeftNavOpen, setIsLeftNavOpen] = useState(false);
   const { setMode: changeListMode } = useContext(ListSettingsContext);
+
   const handleToggle = useCallback(() => {
     setIsLeftNavOpen(prevIsLeftNavOpen => !prevIsLeftNavOpen);
   });
-  const handleClose = useCallback(e => {
+  const handleClose = useCallback(pathname => () => {
     setIsLeftNavOpen(false);
-    history.push(textToRouter[e.target.textContent]);
+    history.push(pathname);
   });
+
   return (
     <React.Fragment>
-      <AppBar
-        title="Contacts app"
-        onLeftIconButtonClick={handleToggle}
-        iconElementRight={renderIconElementRight(location.pathname, changeListMode)}
-      />
-      <Drawer open={isLeftNavOpen} docked={false} onRequestChange={setIsLeftNavOpen}>
-        <MenuItem onClick={handleClose} value={HOME_PATHNAME}>
-          About
-        </MenuItem>
-        <MenuItem onClick={handleClose} value={LIST_PATHNAME}>
-          List
-        </MenuItem>
-        <MenuItem onClick={handleClose} value={ADD_PATHNAME}>
-          Add Contact
-        </MenuItem>
-        <MenuItem onClick={handleClose} value={ADD_GROUP_PATHNAME}>
-          Add Group
-        </MenuItem>
+      <AppBar position="sticky">
+        <Toolbar>
+          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+            <MenuIcon onClick={handleToggle} />
+          </IconButton>
+          <Typography variant="h6" color="inherit" className={classes.grow}>
+            Contacts app
+          </Typography>
+          {location.pathname === LIST_PATHNAME && (
+            <IconElementList changeListMode={changeListMode} />
+          )}
+        </Toolbar>
+      </AppBar>
+      <Drawer open={isLeftNavOpen} onClose={handleToggle}>
+        <div className={classes.list}>
+          <List>
+            <ListItem button onClick={handleClose(HOME_PATHNAME)}>
+              <ListItemText primary="About" />
+            </ListItem>
+            <ListItem button onClick={handleClose(LIST_PATHNAME)}>
+              <ListItemText primary="List" />
+            </ListItem>
+            <ListItem button onClick={handleClose(ADD_PATHNAME)}>
+              <ListItemText primary="Add Contact" />
+            </ListItem>
+            <ListItem button onClick={handleClose(ADD_GROUP_PATHNAME)}>
+              <ListItemText primary="Add Group" />
+            </ListItem>
+          </List>
+        </div>
       </Drawer>
     </React.Fragment>
   );

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useContext } from 'react';
-// import PropTypes from 'prop-types';
 import { Form, Field } from 'react-final-form';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from '@material-ui/core/Button';
 import FormTextField from '../../components/FormTextField';
 import FormMultiSelectField from '../../components/FormMultiSelectField';
 import validate from './form-validations';
@@ -61,7 +60,7 @@ function CreateOrEditContactPage({ match, history }) {
       onSubmit={saveContact}
       initialValues={initialValues}
       validate={validate}
-      render={({ handleSubmit, pristine, invalid, submitting, reset }) => (
+      render={({ handleSubmit, pristine, invalid, submitting, form }) => (
         <form style={styles.formContainer} onSubmit={handleSubmit}>
           <Field name="name" label="Name" placeholder="Name" component={FormTextField} />
           <Field name="email" label="Email" placeholder="Email" component={FormTextField} />
@@ -82,22 +81,27 @@ function CreateOrEditContactPage({ match, history }) {
             component={FormMultiSelectField}
             label="Groups"
             options={groupOptions}
+            multiple
           />
           <div>
-            <RaisedButton
+            <Button
               style={styles.buttonStyle}
-              label="Save contact"
-              primary
+              variant="contained"
+              color="primary"
               type="submit"
               disabled={pristine || submitting || invalid}
-            />
-            <RaisedButton
+            >
+              Save contact
+            </Button>
+            <Button
               style={styles.buttonStyle}
-              label="Reset values"
-              secondary
+              variant="contained"
+              color="secondary"
               disabled={pristine || submitting}
-              onClick={reset}
-            />
+              onClick={form.reset}
+            >
+              Reset values
+            </Button>
           </div>
         </form>
       )}

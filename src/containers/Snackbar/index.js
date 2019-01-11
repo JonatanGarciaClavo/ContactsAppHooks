@@ -1,11 +1,22 @@
 import React, { useContext } from 'react';
-import Snackbar from 'material-ui/Snackbar';
+import Snackbar from '@material-ui/core/Snackbar';
 import { Context as SnackbarContext } from '../../state/snackbar/context';
+
+const ANCHOR_ORIGIN = {
+  vertical: 'bottom',
+  horizontal: 'left',
+};
 
 function SB() {
   const [message, { close }] = useContext(SnackbarContext);
   return (
-    <Snackbar open={!!message} message={message} autoHideDuration={3000} onRequestClose={close} />
+    <Snackbar
+      anchorOrigin={ANCHOR_ORIGIN}
+      open={!!message}
+      message={message}
+      autoHideDuration={3000}
+      onClose={close}
+    />
   );
 }
 

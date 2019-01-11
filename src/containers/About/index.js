@@ -1,13 +1,25 @@
-import React from "react";
-import Card from 'material-ui/Card';
-import CardTitle from 'material-ui/Card/CardTitle';
-import CardText from 'material-ui/Card/CardText';
+import React from 'react';
+import { makeStyles } from '@material-ui/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+
+const useStyles = makeStyles(() => ({
+  card: { margin: '1em' },
+}));
 
 export default function About() {
+  const classes = useStyles();
   return (
-    <Card style={{ margin: "1em" }}>
-      <CardTitle title="Contacts App" subtitle="Learning rematch" />
-      <CardText>This is a example app using rematch and redux-form.</CardText>
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography gutterBottom variant="h4" component="h2">
+          Learning hooks
+        </Typography>
+        <Typography component="p">
+          This is a example app using react hooks and final-form.
+        </Typography>
+      </CardContent>
     </Card>
   );
 }

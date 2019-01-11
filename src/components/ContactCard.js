@@ -1,40 +1,55 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Card from "material-ui/Card";
-import CardMedia from "material-ui/Card/CardMedia";
-import CardTitle from "material-ui/Card/CardTitle";
-import CardActions from "material-ui/Card/CardActions";
-import FlatButton from "material-ui/FlatButton";
+import React, { useCallback, memo } from 'react';
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/styles';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import CardActions from '@material-ui/core/CardActions';
+import Button from '@material-ui/core/Button';
+
+const useStyles = makeStyles(() => ({
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
+  card: {
+    width: '300px',
+    margin: '1em 0 0 0',
+  },
+}));
 
 // https://imgur.com/mbZIBzc
-const ContactCard = ({ contact, onEditClick, onDeleteClick, big }) => {
-  const { name, imgUrl, email, groups } = contact;
+const ContactCard = ({ contact, onEditClick, onDeleteClick }) => {
+  const classes = useStyles();
+  const { name, imgUrl, email, groups, id } = contact;
+  const handleEditClick = useCallback(() => {
+    onEditClick(id);
+  });
+  const handleDeleteClick = useCallback(() => {
+    onDeleteClick(id);
+  });
   return (
-    <Card style={{ width: big ? "auto" : "300px", margin: "1em 0 0 0" }}>
+    <Card className={classes.card}>
       <CardMedia
-        mediaStyle={{ textAlign: "center" }}
-        overlay={<CardTitle title={name} />}
-      >
-        <img
-          alt="contact"
-          src={imgUrl || "http://i.imgur.com/mbZIBzc.png"}
-          style={{
-            height: "auto",
-            width: "auto",
-            maxWidth: 300,
-            minWidth: 300,
-            maxHeight: 300
-          }}
-        />
-      </CardMedia>
-      <CardTitle
-        titleStyle={{ fontSize: "12pt" }}
-        title={email}
-        subtitle={groups || "Without group"}
+        className={classes.media}
+        image={imgUrl || 'http://i.imgur.com/mbZIBzc.png'}
+        alt="contact"
       />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+          {name}
+        </Typography>
+        <Typography component="p">{email}</Typography>
+        <Typography component="p">{groups || 'Without group'}</Typography>
+      </CardContent>
       <CardActions>
-        <FlatButton onClick={onEditClick} label="Edit" />
-        <FlatButton onClick={onDeleteClick} label="Delete" />
+        <Button onClick={handleEditClick} size="small" color="primary">
+          Edit
+        </Button>
+        <Button onClick={handleDeleteClick} size="small" color="primary">
+          Delete
+        </Button>
       </CardActions>
     </Card>
   );
@@ -43,7 +58,7 @@ const ContactCard = ({ contact, onEditClick, onDeleteClick, big }) => {
 ContactCard.propTypes = {
   contact: PropTypes.object,
   onEditClick: PropTypes.func,
-  onDeleteClick: PropTypes.func
+  onDeleteClick: PropTypes.func,
 };
 
-export default ContactCard;
+export default memo(ContactCard);
