@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useContext } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Drawer from '@material-ui/core/Drawer';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -18,14 +18,7 @@ import {
 } from '../../globals/pathNames';
 import { Context as ListSettingsContext } from '../../state/listSettings/context';
 
-function renderIconElementRight(pathname, changeListMode) {
-  if (pathname === LIST_PATHNAME) {
-    return <IconElementList changeListMode={changeListMode} />;
-  }
-  return null;
-}
-
-const styles = {
+const useStyles = makeStyles(() => ({
   grow: {
     flexGrow: 1,
   },
@@ -36,11 +29,13 @@ const styles = {
   list: {
     width: 200,
   },
-};
+}));
 
-function Navbar({ location, history, classes }) {
+function Navbar({ location, history }) {
+  const classes = useStyles();
   const [isLeftNavOpen, setIsLeftNavOpen] = useState(false);
   const { setMode: changeListMode } = useContext(ListSettingsContext);
+
   const handleToggle = useCallback(() => {
     setIsLeftNavOpen(prevIsLeftNavOpen => !prevIsLeftNavOpen);
   });
@@ -48,6 +43,7 @@ function Navbar({ location, history, classes }) {
     setIsLeftNavOpen(false);
     history.push(pathname);
   });
+
   return (
     <React.Fragment>
       <AppBar position="sticky">
@@ -58,7 +54,9 @@ function Navbar({ location, history, classes }) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             Contacts app
           </Typography>
-          {renderIconElementRight(location.pathname, changeListMode)}
+          {location.pathname === LIST_PATHNAME && (
+            <IconElementList changeListMode={changeListMode} />
+          )}
         </Toolbar>
       </AppBar>
       <Drawer open={isLeftNavOpen} onClose={handleToggle}>
@@ -83,4 +81,4 @@ function Navbar({ location, history, classes }) {
   );
 }
 
-export default withStyles(styles)(Navbar);
+export default Navbar;
