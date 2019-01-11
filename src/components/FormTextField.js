@@ -1,21 +1,16 @@
-import React from "react";
-import TextField from "material-ui/TextField";
+import React from 'react';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
-function renderTextField({
-  input,
-  label,
-  placeholder,
-  meta: { touched, error },
-  ...custom
-}) {
+function renderTextField({ name, input, label, placeholder, meta: { touched, error }, ...custom }) {
   return (
-    <TextField
-      hintText={placeholder}
-      floatingLabelText={label}
-      errorText={touched && error}
-      {...input}
-      {...custom}
-    />
+    <FormControl error={!!(touched && error)} aria-describedby="text-input">
+      <InputLabel htmlFor={name}>{label}</InputLabel>
+      <Input id={name} {...input} {...custom} />
+      {touched && error && <FormHelperText id={name}>{error}</FormHelperText>}
+    </FormControl>
   );
 }
 

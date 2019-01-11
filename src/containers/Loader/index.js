@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import LinearProgress from 'material-ui/LinearProgress';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { Context as UIContext } from '../../state/ui/context';
 
 function Loader() {

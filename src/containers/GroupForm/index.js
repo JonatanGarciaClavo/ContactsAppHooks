@@ -1,7 +1,6 @@
 import React, { useContext, useCallback, useEffect } from 'react';
-// import PropTypes from "prop-types";
 import { Form, Field } from 'react-final-form';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from '@material-ui/core/Button';
 import FormTextField from '../../components/FormTextField';
 import validate from './form-validations';
 import { makeSelectGroupById } from '../../state/groups/selectors';
@@ -51,24 +50,28 @@ function CreateOrEditGroupPage({ match, history }) {
       initialValues={initialValues}
       validate={validate}
       onSubmit={saveGroup}
-      render={({ handleSubmit, pristine, invalid, submitting, reset }) => (
+      render={({ handleSubmit, pristine, invalid, submitting, form }) => (
         <form style={styles.formContainer} onSubmit={handleSubmit}>
           <Field name="name" label="Name" placeholder="Name" component={FormTextField} />
           <div>
-            <RaisedButton
+            <Button
               style={styles.buttonStyle}
-              label="Save group"
-              primary
+              variant="contained"
+              color="primary"
               type="submit"
               disabled={pristine || submitting || invalid}
-            />
-            <RaisedButton
+            >
+              Save group
+            </Button>
+            <Button
               style={styles.buttonStyle}
-              label="Reset values"
-              secondary
+              variant="contained"
+              color="secondary"
               disabled={pristine || submitting}
-              onClick={reset}
-            />
+              onClick={form.reset}
+            >
+              Reset values
+            </Button>
           </div>
         </form>
       )}

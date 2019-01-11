@@ -1,12 +1,15 @@
 import React, { useCallback, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import List from 'material-ui/List';
-import ListItem from 'material-ui/List/ListItem';
-import Avatar from 'material-ui/Avatar';
-import Divider from 'material-ui/Divider';
-import Subheader from 'material-ui/Subheader';
-import IconButton from 'material-ui/IconButton';
-import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Avatar from '@material-ui/core/Avatar';
+import Divider from '@material-ui/core/Divider';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ContactCard from '../../components/ContactCard';
 import { EDIT_PATHNAME, DETAIL_PATHNAME } from '../../globals/pathNames';
 import { makeSelectContactListPopulated } from '../../state/contacts/selectors';
@@ -18,27 +21,24 @@ import { LIST_MODE } from '../../state/listSettings/state';
 
 function renderContactListItems(contacts, transitionToContactDetail, deleteContact) {
   return contacts.map(contact => (
-    <div key={`contact-${contact.id}`}>
-      <ListItem
-        leftAvatar={
-          contact.imgUrl ? (
+    <React.Fragment key={`contact-${contact.id}`}>
+      <ListItem onClick={() => transitionToContactDetail(contact.id)}>
+        <ListItemAvatar>
+          {contact.imgUrl ? (
             <Avatar src={contact.imgUrl} />
           ) : (
             <Avatar>{contact.name.substring(0, 1)}</Avatar>
-          )
-        }
-        primaryText={contact.name}
-        secondaryText={contact.groups || 'Without group'}
-        secondaryTextLines={1}
-        onClick={() => transitionToContactDetail(contact.id)}
-        rightIconButton={
+          )}
+        </ListItemAvatar>
+        <ListItemText primary={contact.name} secondary={contact.groups || 'Without group'} />
+        <ListItemSecondaryAction>
           <IconButton>
             <DeleteIcon onClick={() => deleteContact(contact.id)} />
           </IconButton>
-        }
-      />
-      <Divider key={`divider-${contact.id}`} inset />
-    </div>
+        </ListItemSecondaryAction>
+      </ListItem>
+      <Divider />
+    </React.Fragment>
   ));
 }
 
@@ -62,8 +62,7 @@ function renderContactList(
 ) {
   if (mode === LIST_MODE) {
     return (
-      <List>
-        <Subheader>Contacts</Subheader>
+      <List subheader={<ListSubheader>Contacts</ListSubheader>}>
         {renderContactListItems(contacts, transitionToContactDetail, deleteContact)}
       </List>
     );
